@@ -23,6 +23,14 @@
             color: #1a1a1a;
         }
 
+        /* Mobile: fix background issues on iOS/Android */
+        @media (max-width: 768px) {
+            body {
+                background-attachment: scroll; /* iOS Safari doesn't support fixed well */
+                background-position: center top;
+            }
+        }
+
         .container {
             max-width: 440px;
             margin: 0 auto;
@@ -575,6 +583,26 @@
             transition: all 0.3s ease;
         }
 
+        /* Minimal start overlay for autoplay fallback on mobile */
+        .start-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.25);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        .start-overlay .start-card {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 14px 18px;
+            font-family: 'Manrope', sans-serif;
+            color: #2c2c2c;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
         .music-control:hover {
             transform: scale(1.1);
         }
@@ -910,6 +938,9 @@
         <source src="sundettoi.ogg" type="audio/ogg">
         <source src="sundettoi.mp3" type="audio/mpeg">
     </audio>
+    <div class="start-overlay" id="startOverlay">
+        <div class="start-card">Музыка дайын. Бастау үшін түртіңіз</div>
+    </div>
 
     <div class="music-control" id="musicControl">
         <span class="heart">♪</span>
@@ -1090,6 +1121,33 @@
         const musicControl = document.getElementById('musicControl');
         const backgroundMusic = document.getElementById('backgroundMusic');
         let isPlaying = false;
+
+        const startOverlay = document.getElementById('startOverlay');
+        function tryPlay() {
+            backgroundMusic.play().then(() => {
+                musicControl.classList.add('playing');
+                musicControl.innerHTML = '<span class="heart">⏸</span>';
+                isPlaying = true;
+                if (startOverlay) startOverlay.style.display = 'none';
+            }).catch(() => {
+                if (startOverlay) startOverlay.style.display = 'flex';
+            });
+        }
+        // Attempt autoplay after load (may be blocked on mobile)
+        window.addEventListener('load', () => {
+            setTimeout(tryPlay, 300);
+        });
+        // Start on first user gesture if needed
+        function startOnGesture() {
+            if (!isPlaying) tryPlay();
+        }
+        document.addEventListener('click', startOnGesture, { once: true });
+        document.addEventListener('touchstart', startOnGesture, { once: true });
+        document.addEventListener('mousedown', startOnGesture, { once: true });
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible' && !isPlaying) tryPlay();
+        });
+        if (startOverlay) startOverlay.addEventListener('click', startOnGesture);
 
         musicControl.addEventListener('click', function() {
             if (isPlaying) {
