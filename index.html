@@ -605,21 +605,122 @@
         /* Minimal start overlay for autoplay fallback on mobile */
         .start-overlay {
             position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.25);
-            display: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
             align-items: center;
             justify-content: center;
             z-index: 9999;
+            backdrop-filter: blur(5px);
+            padding: 20px;
         }
         .start-overlay .start-card {
-            background: rgba(255,255,255,0.85);
+            background: rgba(255,255,255,0.95);
             backdrop-filter: blur(10px);
             border-radius: 16px;
-            padding: 14px 18px;
+            padding: 20px 24px;
             font-family: 'Manrope', sans-serif;
             color: #2c2c2c;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            text-align: center;
+            max-width: 300px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .start-overlay .start-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .start-overlay .start-card {
+                padding: 18px 22px;
+                font-size: 15px;
+                max-width: 280px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .start-overlay .start-card {
+                padding: 16px 20px;
+                font-size: 14px;
+                max-width: 260px;
+            }
+        }
+        
+        /* Music Control Button */
+        .music-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .music-control:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .music-control.playing {
+            animation: musicPulse 2s infinite;
+            background: rgba(201, 169, 110, 0.9);
+        }
+        
+        @keyframes musicPulse {
+            0% { box-shadow: 0 0 0 0 rgba(201, 169, 110, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(201, 169, 110, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(201, 169, 110, 0); }
+        }
+        
+        .heart {
+            color: #c9a96e;
+            font-size: 20px;
+        }
+        
+        .music-control.playing .heart {
+            color: white;
+        }
+        
+        /* Мобильные улучшения для кнопки музыки */
+        @media (max-width: 768px) {
+            .music-control {
+                top: 15px;
+                right: 15px;
+                width: 45px;
+                height: 45px;
+            }
+            
+            .heart {
+                font-size: 18px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .music-control {
+                top: 10px;
+                right: 10px;
+                width: 40px;
+                height: 40px;
+            }
+            
+            .heart {
+                font-size: 16px;
+            }
         }
 
 
@@ -871,28 +972,135 @@
         .poem-content p:nth-child(4) { animation-delay: 0.4s; }
         .poem-content p:nth-child(5) { animation-delay: 0.5s; }
 
-        @media (max-width: 480px) {
+        /* Улучшенный мобильный дизайн */
+        @media (max-width: 768px) {
             .container {
-                padding: 10px;
+                padding: 0;
+                max-width: 100%;
             }
             
-            .section {
-                padding: 30px 20px;
+            /* Улучшаем секции для мобильных */
+            .hero-section,
+            .invitation-section,
+            .details-section,
+            .poem-section,
+            .countdown-section {
+                margin: 10px 0;
+                padding: 40px 20px;
+                background: rgba(255,255,255,0.45);
+                backdrop-filter: blur(15px);
             }
-
-            .section:first-child {
-                padding-top: 40px;
+            
+            /* Главный заголовок */
+            .main-title {
+                font-size: 24px;
+                letter-spacing: 2px;
+                margin: 20px 0;
             }
-
-            .wedding-title {
+            
+            /* Фото пары */
+            .couple-photo {
+                width: 120px;
+                height: 120px;
+                border: 3px solid rgba(255,255,255,0.8);
+            }
+            
+            /* Письмо */
+            .letter {
+                padding: 25px 20px;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+            
+            .letter-header {
+                font-size: 16px;
+                margin-bottom: 15px;
+            }
+            
+            .letter-names {
                 font-size: 20px;
+                margin: 15px 0;
             }
-
+            
+            /* Детали события */
+            .date-big {
+                font-size: 42px;
+            }
+            
+            .month-text {
+                font-size: 18px;
+            }
+            
+            .time-value {
+                font-size: 24px;
+            }
+            
+            /* Календарь */
+            .calendar {
+                max-width: 300px;
+            }
+            
+            .day {
+                padding: 6px;
+                font-size: 13px;
+            }
+            
+            /* Обратный отсчет */
+            .time-number {
+                font-size: 24px;
+                width: 60px;
+                height: 60px;
+                line-height: 60px;
+            }
+            
+            .time-label {
+                font-size: 11px;
+            }
+            
+            /* Стихи */
+            .poem-text {
+                font-size: 14px;
+                line-height: 1.8;
+                max-width: 320px;
+            }
+            
+            /* Форма RSVP */
+            .wa-form {
+                max-width: 320px;
+            }
+            
+            .wa-input, .wa-select {
+                padding: 14px 16px;
+                font-size: 16px; /* Предотвращает зум на iOS */
+            }
+            
+            .wa-btn {
+                padding: 14px 20px;
+                font-size: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            /* Очень маленькие экраны */
+            .hero-section,
+            .invitation-section,
+            .details-section,
+            .poem-section,
+            .countdown-section {
+                padding: 30px 15px;
+                margin: 5px 0;
+            }
+            
+            .main-title {
+                font-size: 20px;
+                letter-spacing: 1px;
+            }
+            
             .couple-photo {
                 width: 100px;
                 height: 100px;
             }
-
+            
             .letter {
                 padding: 20px 15px;
                 font-size: 11px;
@@ -943,8 +1151,9 @@
     <div class="start-overlay" id="startOverlay">
         <div class="start-card">Музыка дайын. Бастау үшін түртіңіз</div>
     </div>
-
-    <div class="music-control" id="musicControl">
+    
+    <!-- Music Control Button -->
+    <div id="musicControl" class="music-control">
         <span class="heart">♪</span>
     </div>
 
@@ -1119,7 +1328,62 @@
         setInterval(updateCountdown, 1000);
         updateCountdown();
 
-        // Music removed by user request
+        // Music Control with Auto-play
+        const musicControl = document.getElementById('musicControl');
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const startOverlay = document.getElementById('startOverlay');
+        let isPlaying = false;
+        
+        // Set volume
+        backgroundMusic.volume = 0.3;
+        
+        function tryPlayMusic() {
+            backgroundMusic.play().then(() => {
+                isPlaying = true;
+                musicControl.classList.add('playing');
+                musicControl.innerHTML = '<span class="heart">⏸</span>';
+                if (startOverlay) startOverlay.style.display = 'none';
+            }).catch((error) => {
+                console.log('Auto-play blocked:', error);
+                if (startOverlay) startOverlay.style.display = 'flex';
+            });
+        }
+        
+        // Try to auto-play on page load
+        window.addEventListener('load', () => {
+            setTimeout(tryPlayMusic, 500);
+        });
+        
+        // Auto-play on first user interaction
+        function startOnUserGesture() {
+            if (!isPlaying) {
+                tryPlayMusic();
+            }
+        }
+        
+        document.addEventListener('click', startOnUserGesture, { once: true });
+        document.addEventListener('touchstart', startOnUserGesture, { once: true });
+        document.addEventListener('keydown', startOnUserGesture, { once: true });
+        
+        // Music control button functionality
+        musicControl.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (isPlaying) {
+                backgroundMusic.pause();
+                isPlaying = false;
+                musicControl.classList.remove('playing');
+                musicControl.innerHTML = '<span class="heart">♪</span>';
+            } else {
+                tryPlayMusic();
+            }
+        });
+        
+        // Start overlay click handler
+        if (startOverlay) {
+            startOverlay.addEventListener('click', function() {
+                tryPlayMusic();
+            });
+        }
 
         // WhatsApp quick actions (name + yes/no)
         const waForm = document.getElementById('waForm');
