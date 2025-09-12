@@ -13,24 +13,37 @@
 
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@300;400;500&display=swap');
 
+        html {
+            height: 100%;
+        }
+
         body {
             font-family: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-            background: url('photo_2025-09-12_18-47-32.jpg');
+            /* Красивый градиентный фон как запасной */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            /* Фоновое изображение поверх градиента */
+            background-image: url('photo_2025-09-12_18-47-32.jpg');
             background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            background-position: center center;
             background-repeat: no-repeat;
+            background-attachment: fixed;
             min-height: 100vh;
+            height: 100%;
             color: #1a1a1a;
+            margin: 0;
+            padding: 0;
         }
 
         /* Mobile: fix background issues on iOS/Android */
         @media (max-width: 768px) {
             body {
+                /* Запасной градиент */
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                /* Фоновое изображение */
+                background-image: url('photo_2025-09-12_18-47-32.jpg');
                 background-attachment: scroll; /* iOS Safari doesn't support fixed well */
                 background-position: center center;
                 background-size: cover;
-                /* Prevent background scaling issues */
                 background-repeat: no-repeat;
             }
         }
@@ -42,14 +55,16 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            position: relative;
+            background: transparent;
         }
 
         /* Hero Section */
         .hero-section {
-            background: rgba(255,255,255,0.70);
+            background: rgba(255,255,255,0.35);
             padding: 80px 30px 60px;
             text-align: center;
-            backdrop-filter: none;
+            backdrop-filter: blur(10px);
             border-radius: 0;
             box-shadow: none;
         }
@@ -102,10 +117,10 @@
 
         /* Invitation Section */
         .invitation-section {
-            background: rgba(255,255,255,0.70);
+            background: rgba(255,255,255,0.35);
             padding: 60px 30px;
             text-align: center;
-            backdrop-filter: none;
+            backdrop-filter: blur(10px);
             margin: 20px 0;
             border-radius: 0;
             box-shadow: none;
@@ -118,10 +133,10 @@
 
         /* Details Section */
         .details-section {
-            background: rgba(255,255,255,0.70);
+            background: rgba(255,255,255,0.35);
             padding: 60px 30px;
             text-align: center;
-            backdrop-filter: none;
+            backdrop-filter: blur(10px);
             margin: 20px 0;
             border-radius: 0;
             box-shadow: none;
@@ -205,10 +220,10 @@
 
         /* Poem Section */
         .poem-section {
-            background: rgba(255,255,255,0.70);
+            background: rgba(255,255,255,0.35);
             padding: 60px 30px;
             text-align: center;
-            backdrop-filter: none;
+            backdrop-filter: blur(10px);
             margin: 20px 0;
             border-radius: 0;
             box-shadow: none;
@@ -237,10 +252,10 @@
 
         /* Countdown Section */
         .countdown-section {
-            background: rgba(255,255,255,0.70);
-            padding: 60px 30px 80px;
+            background: rgba(255,255,255,0.35);
+            padding: 60px 30px;
             text-align: center;
-            backdrop-filter: none;
+            backdrop-filter: blur(10px);
             margin: 20px 0;
             border-radius: 0;
             box-shadow: none;
@@ -607,24 +622,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
 
-        .music-control:hover {
-            transform: scale(1.1);
-        }
 
-        .music-control.playing {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(201, 169, 110, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(201, 169, 110, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(201, 169, 110, 0); }
-        }
-
-        .heart {
-            color: #c9a96e;
-            font-size: 20px;
-        }
 
         /* Title Section Styles */
         .title-section {
@@ -1121,52 +1119,7 @@
         setInterval(updateCountdown, 1000);
         updateCountdown();
 
-        // Music Control
-        const musicControl = document.getElementById('musicControl');
-        const backgroundMusic = document.getElementById('backgroundMusic');
-        let isPlaying = false;
-
-        const startOverlay = document.getElementById('startOverlay');
-        function tryPlay() {
-            backgroundMusic.play().then(() => {
-                musicControl.classList.add('playing');
-                musicControl.innerHTML = '<span class="heart">⏸</span>';
-                isPlaying = true;
-                if (startOverlay) startOverlay.style.display = 'none';
-            }).catch(() => {
-                if (startOverlay) startOverlay.style.display = 'flex';
-            });
-        }
-        // Attempt autoplay after load (may be blocked on mobile)
-        window.addEventListener('load', () => {
-            setTimeout(tryPlay, 300);
-        });
-        // Start on first user gesture if needed
-        function startOnGesture() {
-            if (!isPlaying) tryPlay();
-        }
-        document.addEventListener('click', startOnGesture, { once: true });
-        document.addEventListener('touchstart', startOnGesture, { once: true });
-        document.addEventListener('mousedown', startOnGesture, { once: true });
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'visible' && !isPlaying) tryPlay();
-        });
-        if (startOverlay) startOverlay.addEventListener('click', startOnGesture);
-
-        musicControl.addEventListener('click', function() {
-            if (isPlaying) {
-                backgroundMusic.pause();
-                musicControl.classList.remove('playing');
-                musicControl.innerHTML = '<span class="heart">♪</span>';
-            } else {
-                backgroundMusic.play().catch(e => {
-                    console.log('Audio play failed:', e);
-                });
-                musicControl.classList.add('playing');
-                musicControl.innerHTML = '<span class="heart">⏸</span>';
-            }
-            isPlaying = !isPlaying;
-        });
+        // Music removed by user request
 
         // WhatsApp quick actions (name + yes/no)
         const waForm = document.getElementById('waForm');
@@ -1238,13 +1191,7 @@
             }
         }
 
-        // Auto-play music on user interaction
-        document.addEventListener('click', function() {
-            if (!isPlaying) {
-                backgroundMusic.play().catch(e => {
-                });
-            }
-        }, { once: true });
+
     </script>
     <style>
         /* ===== Visual polish (non-destructive) ===== */
@@ -1276,9 +1223,14 @@
         @media (max-width: 768px) {
             body {
                 animation: none;
+                /* Запасной градиент */
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+                /* Фоновое изображение */
+                background-image: url('photo_2025-09-12_18-47-32.jpg') !important;
                 background-position: center center !important;
-                /* Prevent iOS Safari zoom issues */
                 background-size: cover !important;
+                background-repeat: no-repeat !important;
+                background-attachment: scroll !important;
                 min-height: 100vh;
                 min-height: -webkit-fill-available;
             }
@@ -1297,7 +1249,18 @@
         /* Extra small mobile devices */
         @media (max-width: 480px) {
             body {
-                background-position: center 20% !important;
+                background-position: center 30% !important;
+            }
+        }
+        
+        /* Fallback for older mobile browsers */
+        @media screen and (max-device-width: 768px) {
+            body {
+                background-image: url('photo_2025-09-12_18-47-32.jpg') !important;
+                background-size: cover !important;
+                background-position: center center !important;
+                background-repeat: no-repeat !important;
+                background-attachment: scroll !important;
             }
         }
 
@@ -1350,15 +1313,7 @@
             box-shadow: inset 0 0 20px rgba(255,255,255,0.15), 0 6px 18px rgba(0,0,0,0.06);
         }
 
-        /* Music control: visible playing state */
-        #musicControl {
-            transition: transform 300ms ease, box-shadow 400ms ease, background-color 400ms ease;
-        }
-        #musicControl.playing {
-            transform: scale(1.05);
-            box-shadow: 0 8px 30px rgba(139,115,85,0.35), 0 0 0 10px rgba(139,115,85,0.08);
-            background-color: rgba(255,255,255,0.22);
-        }
+
 
         /* Envelope: slightly more depth without losing transparency */
         .envelope-body { box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 20px 50px rgba(0,0,0,0.05); }
